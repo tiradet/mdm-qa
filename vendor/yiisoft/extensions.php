@@ -545,4 +545,14 @@ return array (
       '@yii/image' => $vendorDir . '/yurkinx/yii2-image/yii/image',
     ),
   ),
+  'mdmsoft/yii2-autonumber' => 
+  array (
+    'name' => 'mdmsoft/yii2-autonumber',
+    'version' => '1.5.2.0',
+    'alias' => 
+    array (
+      '@mdm/autonumber' => $vendorDir . '/mdmsoft/yii2-autonumber',
+    ),
+    'bootstrap' => 'mdm\\autonumber\\Bootstrap',
+  ),
 );

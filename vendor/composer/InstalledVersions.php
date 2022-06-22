@@ -27,12 +27,12 @@ class InstalledVersions
 private static $installed = array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => '161bb4a326a428738ffb27fa9f4b67b2d1825c4f',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -972,6 +972,15 @@ private static $installed = array (
       ),
       'reference' => '10e526fbcf6350ed4cc9ba6298f887d611685367',
     ),
+    'mdmsoft/yii2-autonumber' => 
+    array (
+      'pretty_version' => '1.5.2',
+      'version' => '1.5.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '7e7f5bf567dc949635d8890b25c6d98b1b270bb2',
+    ),
     'miloschuman/yii2-highcharts-widget' => 
     array (
       'pretty_version' => 'dev-master',
@@ -1305,8 +1314,8 @@ private static $installed = array (
     array (
       'provided' => 
       array (
-        0 => '1.0|2.0',
-        1 => '1.0.0 || 2.0.0 || 3.0.0',
+        0 => '1.0.0 || 2.0.0 || 3.0.0',
+        1 => '1.0|2.0',
       ),
     ),
     'psr/simple-cache' => 
@@ -1751,12 +1760,12 @@ private static $installed = array (
     ),
     'yiisoft/yii2-app-basic' => 
     array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => '161bb4a326a428738ffb27fa9f4b67b2d1825c4f',
     ),
     'yiisoft/yii2-authclient' => 
     array (

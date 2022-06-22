@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d0f896c26d2b0c4cc1f58b33cca39d1",
+    "content-hash": "552505633ec123b57b05c7e311d6458f",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -2250,6 +2250,58 @@
                 "source": "https://bitbucket.org/kongoon/yii2-theme-material/src/4d3683e6e3123374e833aab36f0769446053e78d/?at=master"
             },
             "time": "2015-02-20T05:10:42+00:00"
+        },
+        {
+            "name": "mdmsoft/yii2-autonumber",
+            "version": "1.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mdmsoft/yii2-autonumber.git",
+                "reference": "7e7f5bf567dc949635d8890b25c6d98b1b270bb2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mdmsoft/yii2-autonumber/zipball/7e7f5bf567dc949635d8890b25c6d98b1b270bb2",
+                "reference": "7e7f5bf567dc949635d8890b25c6d98b1b270bb2",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bootstrap": "mdm\\autonumber\\Bootstrap",
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "mdm\\autonumber\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Misbahul D Munir",
+                    "email": "misbahuldmunir@gmail.com"
+                }
+            ],
+            "description": "Auto number extension for the Yii framework",
+            "keywords": [
+                " autonumber",
+                " behavior",
+                " extension",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/mdmsoft/yii2-autonumber/issues",
+                "source": "https://github.com/mdmsoft/yii2-autonumber/tree/1.5.2"
+            },
+            "time": "2019-11-20T02:29:57+00:00"
         },
         {
             "name": "npm-asset/sweetalert2",

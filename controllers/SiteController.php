@@ -2,21 +2,24 @@
 
 namespace app\controllers;
 
-
 use Yii;
-use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\models\Booking;
-use app\models\BookingSearch;
+use app\models\User;
+use app\models\Config;
+
+use yii\helpers\Json;
+use yii\helpers\VarDumper;
+use yii\httpclient\Client;
 
 class SiteController extends Controller
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -42,7 +45,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function actions()
     {
@@ -64,130 +67,122 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
-     if (!Yii::$app->user->isGuest) {
-
-               $this->layout='main';
-
-        }else{
-            $this->layout='guest';
-        }
-        
-        return $this->render('index', [
-
-        ]);
-    }
-    public function actionAdmin(){
-        $searchModel = new modelsMasterDeviceSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        //$dataProvider->query->andWhere(['off_loc_code'=>Yii::$app->user->identity->provinceCode]);
-        $dataProvider->sort = [
-            'defaultOrder' => [
-                'create_at' => SORT_DESC,
-            ]
-        ];
-        $off_loc_code = Yii::$app->user->identity->provinceCode;
-        $dbCommand = Yii::$app->db->createCommand("
-               SELECT COUNT(*) as device,
-            setting_device.`name`
-            FROM
-            master_device
-            INNER JOIN setting_device ON setting_device.`code` = master_device.device_type
-            GROUP BY master_device.device_type
-        ");
-        $data = $dbCommand->queryAll();
-
-        $countNotify = MasterNotify::find()->where(['status' => 0])->count();
-        $countDevice = MasterDevice::find()->count();
-        $countPending = MasterNotify::find()->count();
-        return $this->render('admin', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'countNotify'=>$countNotify,
-            'countDevice'=>$countDevice,
-            'countPending'=>$countPending,
-            'data'=>$data
-
-        ]);
+        return $this->render('index');
     }
 
-    public function actionSupport(){
-        $searchModel = new modelsMasterDeviceSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['off_loc_code'=>Yii::$app->user->identity->provinceCode]);
-        $dataProvider->sort = [
-            'defaultOrder' => [
-                'create_at' => SORT_DESC,
-            ]
-        ];
-        $off_loc_code = Yii::$app->user->identity->provinceCode;
-        $dbCommand = Yii::$app->db->createCommand("
-               SELECT COUNT(*) as device,
-            setting_device.`name`
-            FROM
-            master_device
-            INNER JOIN setting_device ON setting_device.`code` = master_device.device_type
-            GROUP BY master_device.device_type
-        ");
-        $data = $dbCommand->queryAll();
-
-        $countNotify = MasterNotify::find()->where(['status' => 0])->count();
-        $countDevice = MasterDevice::find()->count();
-        $countPending = MasterNotify::find()->count();
-        return $this->render('support', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'countNotify'=>$countNotify,
-            'countDevice'=>$countDevice,
-            'countPending'=>$countPending,
-            'data'=>$data
-
-        ]);
-    }
     /**
      * Login action.
      *
-     * @return string
+     * @return Response|string
      */
-    public function actionLogin()
+    
+    public function actionLoginx()
     {
-        $this->layout='loginimg';
         if (!Yii::$app->user->isGuest) {
-
-                return $this->goHome();
-
+            return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
+
+        $model->password = '';
         return $this->render('login', [
             'model' => $model,
         ]);
     }
-    public function actionLoginImg()
-    {
-        $this->layout='loginimg';
-        if (!Yii::$app->user->isGuest) {
 
-            return $this->goHome();
+  
 
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-        return $this->render('login-img', [
-            'model' => $model,
-        ]);
-    }
     /**
      * Logout action.
      *
-     * @return string
+     * @return Response
      */
+
+      public function actionLogin()
+    {
+        $this->layout='login';
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post())) {
+            $url  = Config::findOne(['code' => 'A002'])->value;
+            $onService  = Config::findOne(['code' => 'A001'])->value;
+
+            if($onService=='N'){
+                if ($model->login()){
+                    return $this->goBack();
+                }
+            }else{
+            $client = new Client();
+            $response = $client->createRequest()
+                ->setMethod('post')
+                ->setHeaders(['content-type' => 'application/json'])
+                ->setUrl($url)
+                ->setData([
+                    'username' => $model->username,
+                    'password' => $model->password,
+                ])
+                ->send();
+
+            $rawdata = Json::decode($response->content);
+            $data = $rawdata['data'];
+            $datax = Json::decode($response->content);
+            //VarDumper::dump($datax);
+          //  exit();
+            if($datax['status']==1){
+                $user =  User::find()->where(['username'=>$data['id']])->one();
+                if ($user){
+                    $user->password_hash = Yii::$app->security->generatePasswordHash($model->password);
+                    $user->id_no = $data['id'];
+                    $user->username = $data['username'];
+                    $user->password_reset_token = $data['accessToken'];
+                    $user->auth_key = Yii::$app->security->generateRandomString();
+                    $user->title = $data['title'];
+                    $user->name = $data['name'];
+                    $user->surname = $data['surname'];
+                    $user->positionDesc = $data['positionDesc'];
+                    $user->offLocDesc = $data['offLocDesc'];
+                    $user->orgFullNameDes = $data['orgFullNameDes'];
+                    $user->offLocCode = $data['offLocCode'];
+                    $user->status=10;
+                    $user->save();
+                }else{
+                    $user = new User();
+                    $user->username = $model->username;
+                    $user->password_hash = Yii::$app->security->generatePasswordHash($model->password);
+                    $user->auth_key = Yii::$app->security->generateRandomString();
+                    $user->id_no = $data['id'];
+                    $user->password_reset_token = $data['accessToken'];
+                    $user->title = $data['title'];
+                    $user->name = $data['name'];
+                    $user->surname = $data['surname'];
+                    $user->positionDesc = $data['positionDesc'];
+                    $user->offLocDesc = $data['offLocDesc'];
+                    $user->orgFullNameDes = $data['orgFullNameDes'];
+                    $user->offLocCode = $data['offLocCode'];
+                    $user->status=10;
+                    $user->save();
+                }
+
+                if ($model->login()){
+                    return $this->goBack();
+                }
+            }else{
+
+                return $this->render('login', [
+                    'model' => $model,
+                ]);
+            }
+        }
+
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+    }
+
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -198,20 +193,13 @@ class SiteController extends Controller
     /**
      * Displays contact page.
      *
-     * @return string
+     * @return Response|string
      */
     public function actionContact()
     {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->getSession()->setFlash('', [
-                'text' => 'บันทึกข้อมูลเรียบร้อยแล้ว',
-                'title' => 'การแจ้งเตือน',
-                //'type' => 'primary',
-                'timer' => 3000,
-                'confirmButtonText' => "ตกลง",
-                'showConfirmButton' => false
-            ]);
+            Yii::$app->session->setFlash('contactFormSubmitted');
 
             return $this->refresh();
         }
@@ -227,40 +215,6 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-
         return $this->render('about');
-    }
-    public function actionViewEvents($start = NULL, $end = NULL, $_ = NULL) {
-
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-        //$eventList = Events::find()->where(['is_status'=> 0])->all();
-        $eventList = Booking::find()->all();
-
-        $events = [];
-
-        foreach ($eventList as $event) {
-            $Event = new \yii2fullcalendar\models\Event();
-            $Event->id = $event->id;
-            $Event->title = $event->title;
-             //$Event->description = '';
-             $Event->start = $event->start_meet;
-             $Event->end = $event->end_meet;
-            $Event->color =$event->room->room_color;
-             $Event->textColor = '#FFF';
-            $Event->borderColor = '#000';
-            //$Event->event_type = (($event->event_type == 1) ? 'Holiday' : (($event->event_type == 2) ? 'Important Notice' : (($event->event_type == 3) ? 'Meeting' : 'Messages')));
-           // $Event->allDay = ($event->event_all_day == 1) ? true : false;
-            // $Event->url = $event->event_url;
-            $events[] = $Event;
-        }
-        return $events;
-    }
-    
-        public function actionViewEvent($event_id) {
-            $model = Booking::find()->where(['id'=>$event_id])->one();
-        return $this->renderAjax('view', [
-                    'model' => $model,
-        ]);
     }
 }

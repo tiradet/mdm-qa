@@ -12,7 +12,13 @@ use yii\helpers\Url;
     <ul class="nav navbar-top-links navbar-right">
         <li>
             <?php if(!\Yii::$app->user->isGuest): ?>
-            <span class="m-r-sm text-muted welcome-message">Welcome, <?=\Yii::$app->user->identity->fullname?> || <?=\Yii::$app->user->identity->org->OFF_LOC_DESC?></span>
+            <span class="m-r-sm text-muted welcome-message">Welcome,
+            <?php
+            if (!Yii::$app->user->isGuest) {
+                echo Yii::$app->user->identity->fullnameOffice;
+            }
+            // Yii::$app->user->identity['username']?>
+            </span>
             <?php endif?>
         </li>
         <?php if(!\Yii::$app->user->isGuest): ?>
@@ -24,13 +30,13 @@ use yii\helpers\Url;
         <?php if(\Yii::$app->user->isGuest):?>
         <li>
             <a href="<?=Url::to(['/site/login'])?>">
-                <i class="fa fa-sign-in"></i> Login
+                <i class="fa fa-home" aria-hidden="true"></i> เข้าสู่ระบบ
             </a>
         </li>
         <?php else:?>
         <li>
             <a href="<?=Url::to(['/site/logout'])?>" data-method="post">
-                <i class="fa fa-sign-out"></i> ออกจากระบบ
+                <i class="fa fa-location-arrow" aria-hidden="true"></i> ออกจากระบบ
             </a>
         </li>
 

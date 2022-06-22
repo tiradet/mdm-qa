@@ -15,7 +15,8 @@
         <?php
             $menu=[
                 ['label' => '<i class="fa fa-home" aria-hidden="true"></i> หน้าแรก', 'url' => ['/site/index']],
-                ['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> รายการจองห้องประชุม', 'url' => ['/booking/index']],
+                ['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> รายการแจ้งปัญหา', 'url' => ['/job/index']],
+                ['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> คู่มือการใช้งาน ต่างๆ', 'url' => ['/manual/index']],
 
                 ['label' => '<span class="fa fa-list" aria-hidden="true"></span> รายงาน',
                     'items' => [
@@ -23,8 +24,8 @@
                     ]
                 ], ['label' => '<span class="fa fa-cogs" aria-hidden="true"></span> ตั้งค่า',
                     'items' => [
-                        ['label' => 'อาคาร', 'url' => ['/builder/index']],
-                        ['label' => 'ห้องประชุม', 'url' => ['/room/index']],
+                        //['label' => 'อาคาร', 'url' => ['/builder/index']],
+                        ['label' => 'ระบบต่างๆ', 'url' => ['/system-list/index']],
                         ['label' => 'Line Token', 'url' => ['/line-token/index']],
                     ]
                 ],

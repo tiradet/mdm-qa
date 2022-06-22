@@ -7,8 +7,6 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use app\models\OffLocCode;
-
 
 /**
  * User model
@@ -19,7 +17,7 @@ use app\models\OffLocCode;
  * @property string $password_reset_token
  * @property string $email
  * @property string $auth_key
- *  * @property string $org_code
+ *  * @property string $province_id
  * @property integer $role
  * @property integer $status
  * @property integer $created_at
@@ -32,14 +30,9 @@ class User extends ActiveRecord implements IdentityInterface {
     const STATUS_ACTIVE = 10;
     const ROLE_USER = 99;
 
-    /**
-     * @inheritdoc
-     */
-//    public static function getDb(){
-//        return Yii::$app->get('db2');
-//    }
+
     public static function tableName() {
-        return '{{%user2}}';
+        return '{{%user}}';
     }
 
     /**
@@ -54,20 +47,24 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            [['fullname', 'org_code', 'username','password_hash'], 'required'],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            ['role', 'default', 'value' => self::ROLE_USER],
-            // ['role', 'in', 'range' => [self::ROLE_USER]],
-            [['org_code', 'province_code'], 'string', 'max' => 5],
-            [['fullname', 'position'], 'string', 'max' => 100],
-            [['id_no'], 'string', 'max' => 20],
+            [['username', 'password_hash', 'positionDesc', 'offLocCode'], 'required'],
+            [['password_reset_token'], 'string'],
+            [['role', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['username', 'password_hash', 'email', 'surname'], 'string', 'max' => 255],
+            [['auth_key'], 'string', 'max' => 32],
+            [['positionDesc'], 'string', 'max' => 120],
+            [['orgFullNameDes'], 'string', 'max' => 150],
+            [['offLocDesc', 'name'], 'string', 'max' => 100],
+            [['offLocCode', 'title'], 'string', 'max' => 20],
+            [['id_no'], 'string', 'max' => 15],
         ];
     }
 
-    public function attributeLabels() {
+public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'username' => 'Username',
@@ -77,11 +74,12 @@ class User extends ActiveRecord implements IdentityInterface {
             'email' => 'Email',
             'role' => 'Role',
             'status' => 'Status',
-            'org_code' => 'สำนักงาน',
-            'province_code' => 'รหัสจังหวัด',
-            'fullname' => 'ชื่อ-สกุล',
-            'id_no' => 'รหัสบัตรประจำตัวประชาชน',
-            'position' => 'ตำแหน่ง',
+            'positionDesc' => 'Position Desc',
+            'orgFullNameDes' => 'Org Full Name Des',
+            'offLocDesc' => 'Off Loc Desc',
+            'offLocCode' => 'Off Loc Code',
+            'name' => 'Name',
+            'surname' => 'Surname',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -123,8 +121,8 @@ class User extends ActiveRecord implements IdentityInterface {
         }
 
         return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+                    'password_reset_token' => $token,
+                    'status' => self::STATUS_ACTIVE,
         ]);
     }
 
@@ -151,37 +149,15 @@ class User extends ActiveRecord implements IdentityInterface {
         return $this->getPrimaryKey();
     }
 
-    public function getProvinceId() {
-        return (string) $this->province_id;
+    public function getFullname(){
+        return $this->title.''.$this->name.' '.$this->surname;
     }
 
-    public function getProvinceCode() {
-        return $this->province_code;
-    }
-    public function getRoles() {
-        return $this->role;
-    }
-    public function getOffLocCode() {
-        return $this->province_code;
-    }
-    public function getOffName() {
-        return $this->role;
-    }
-    public function getApprove() {
-        switch ($this->status) {
-            case 10 :
-                return '<span class="label label-primary">อนุมัติแล้ว</span>';
-            case 0 :
-                return '<span class="label label-danger">ไม่อนุมัติ</span>';
-
-        }
-
-        return NULL;
+    public function getFullnameOffice(){
+        return $this->title.''.$this->name.' '.$this->surname.' | '.$this->offLocDesc;
     }
 
-    public function getOrg(){
-        return $this->hasOne(OffLocCode::className(),['OFF_LOC_CODE'=>'org_code']);
-    }
+
     /**
      * @inheritdoc
      */
@@ -203,8 +179,8 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($password) {
-        //return Yii::$app->security->validatePassword($password, $this->password_hash);
-        return $this->password_hash === $password;
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+        //return $this->password_hash === $password;
     }
 
     /**
@@ -213,8 +189,8 @@ class User extends ActiveRecord implements IdentityInterface {
      * @param string $password
      */
     public function setPassword($password) {
-        //$this->password_hash = Yii::$app->security->generatePasswordHash($password);
-        $this->password_hash = $password;
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        //$this->password_hash = $password;
     }
 
     /**
@@ -237,13 +213,5 @@ class User extends ActiveRecord implements IdentityInterface {
     public function removePasswordResetToken() {
         $this->password_reset_token = null;
     }
-
-    public function getDltOffice() {
-        return $this->hasOne(Province::className(), ['PRV_CODE' => 'province_id']);
-    }
-
-//    public function getUser_role(){
-//        return $this->hasOne(UserRole::className(), ['role_id' => 'role']);
-//    }
 
 }

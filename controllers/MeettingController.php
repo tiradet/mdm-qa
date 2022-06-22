@@ -31,7 +31,7 @@ class MeettingController extends \yii\web\Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
              $book = $this->findModel($model->id);
-             $message = "ระบบได้บันทึกการจอง ".$book->room->room_title."\r\n เรื่อง :: ".$book->title."  เรียบร้อยแล้ว\r\n วันที่ ".$book->start_meet."\r\n ถึงวันที่ ".$book->end_meet." \r\n ผู้จอง :".$book->booking;
+             $message = "แจ้งปัญหา ".$book->title."\r\n เรื่อง :: ".$book->title."  เรียบร้อยแล้ว\r\n วันที่ ".$book->start_meet."\r\n ถึงวันที่ ".$book->end_meet." \r\n ผู้จอง :".$book->booking;
              $res = $this->notify_messagex($message);
 
              Yii::$app->session->setFlash(\dominus77\sweetalert2\Alert::TYPE_SUCCESS, [
@@ -70,7 +70,7 @@ class MeettingController extends \yii\web\Controller
         public function notify_messagex($message) {
         $line_api = 'https://notify-api.line.me/api/notify';
         //$line_token = '2gFeII7MljzFBWy8hRqSmiywvZBIYHEa4oLGAN7Ei2q'; //DLT: ระบบรถทดสอบ
-       $line_token = 'LI6MVtnlbQoEXgobvGqGmKiKJ7oqGaxZWNUC24oZGGz'; //IMplement Line Token
+        $line_token = 'LI6MVtnlbQoEXgobvGqGmKiKJ7oqGaxZWNUC24oZGGz'; //IMplement Line Token
         $queryData = array('message' => $message);
         $queryData = http_build_query($queryData, '', '&');
         $headerOptions = array('http' => array('method' => 'POST', 'header' => "Content-Type: application/x-www-form-urlencoded\r\n" . "Authorization: Bearer " . $line_token . "\r\n" . "Content-Length: " . strlen($queryData) . "\r\n", 'content' => $queryData));

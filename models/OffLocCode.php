@@ -32,7 +32,7 @@ class OffLocCode extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'off_loc_code';
+        return 'tabt_office_location';
     }
 
     /**

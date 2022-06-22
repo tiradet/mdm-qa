@@ -28,7 +28,8 @@
         "brussens/yii2-maintenance-mode": "*",
         "kartik-v/yii2-widgets": "*",
         "kartik-v/bootstrap-fileinput": "dev-master",
-        "kartik-v/yii2-widget-colorinput": "dev-master"
+        "kartik-v/yii2-widget-colorinput": "dev-master",
+        "mdmsoft/yii2-autonumber": "~1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

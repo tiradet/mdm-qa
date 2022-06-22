@@ -88,7 +88,6 @@ class RoomController extends Controller
     public function actionCreate()
     {
         $model = new Room();
-
         if ($model->load(Yii::$app->request->post()) ) {
 
             $this->Uploads(false);

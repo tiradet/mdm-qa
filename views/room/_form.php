@@ -23,15 +23,15 @@ use kartik\color\ColorInput;
     <div class="col-md-3" >
         <?=
         $form->field($model, 'builder_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(\app\models\Builder::find()->all(), 'b_code','b_desc'),
+            'data' => ArrayHelper::map(\app\models\SystemList::find()->all(), 'ref','system_title'),
             'disabled' => false,
-            'options' => ['placeholder' => 'เลือก  อาคาร',
+            'options' => ['placeholder' => 'เลือก  ระบบงาน',
                 //'id' => 'ddl-province-start',
             ],
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ])->label('อาคาร');
+        ])->label('ระบบงาน');
         ?>
     </div>
     <div class="col-md-4">
@@ -69,7 +69,7 @@ use kartik\color\ColorInput;
                             'initialPreviewShowDelete'=>true,
                             'initialPreview'=> $initialPreview,
                             'initialPreviewConfig'=> $initialPreviewConfig,
-                            'uploadUrl' => Url::to(['/room/upload-ajax']),
+                            'uploadUrl' => Url::to(['/job/upload-ajax']),
                             'uploadExtraData' => [
                                 'ref' => $model->ref,
                             ],

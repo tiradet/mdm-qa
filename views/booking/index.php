@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
 /* @var $searchModel app\models\BookingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'รายการจองห้องประชุม';
+$this->title = 'รายการแจ้งปัญหา';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="booking-index">

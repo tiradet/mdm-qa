@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="form">
 
                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-                <?= $form->field($model, 'username')->label('ชื่อผู้ใช้งาน') ?>
+                <?= $form->field($model, 'username')->label('รหัสผู้ใช้งาน') ?>
                 <?= $form->field($model, 'password')->passwordInput()->label('รหัสผ่าน') ?>
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
