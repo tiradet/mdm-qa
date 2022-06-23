@@ -51,10 +51,10 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/jcabanillas/
         <div id="wrapper" class="skin-3">
             <?php
             if(@Yii::$app->user->identity->role=='10'){
-             echo $this->render('sidebar', ['directoryAsset' => $directoryAsset]);
-            }else if(@Yii::$app->user->identity->roles=='99'){
-                echo $this->render('sidebar2', ['directoryAsset' => $directoryAsset]);
-            }else if(@Yii::$app->user->identity->roles=='0'){
+             echo $this->render('sidebar_user', ['directoryAsset' => $directoryAsset]);
+            }else if(@Yii::$app->user->identity->role=='99'){
+                echo $this->render('sidebar', ['directoryAsset' => $directoryAsset]);
+            }else if(@Yii::$app->user->identity->role=='0'){
                 echo $this->render('sidebar3', ['directoryAsset' => $directoryAsset]);
             }
             ?>

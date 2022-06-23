@@ -14,8 +14,8 @@
         </li>
         <?php
             $menu=[
-                ['label' => '<i class="fa fa-home" aria-hidden="true"></i> หน้าแรก', 'url' => ['/site/index']],
-                ['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> รายการแจ้งปัญหา', 'url' => ['/job/index']],
+                ['label' => '<i class="fa fa-home" aria-hidden="true"></i> หน้าแรก', 'url' => ['/site/admin']],
+                ['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> รายการแจ้งปัญหา', 'url' => ['/job/index-admin']],
                 ['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> คู่มือการใช้งาน ต่างๆ', 'url' => ['/manual/index']],
 
                 ['label' => '<span class="fa fa-list" aria-hidden="true"></span> รายงาน',
@@ -31,7 +31,7 @@
                 ],
                 ['label' => '<span class ="fa fa-sliders"  aria-hidden="true"></span> RoleBase',
                     'items' => [
-                        ['label' => 'User Management', 'url' => ['/user/index']],
+                        ['label' => 'User Management', 'url' => ['/user-manager/index']],
                         ['label' => 'Assignments', 'url' => ['/admin/assignment']],
                         ['label' => 'Role', 'url' => ['/admin/role']],
                         ['label' => 'Permission', 'url' => ['/admin/permission']],

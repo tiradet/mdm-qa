@@ -67,7 +67,17 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->identity->role==99){
+            return $this->redirect(['site/admin']);
+        }
         return $this->render('index');
+    }
+    public function actionAdmin()
+    {
+        if (Yii::$app->user->identity->role==10){
+            return $this->redirect(['site/index']);
+        }
+        return $this->render('admin');
     }
 
     /**
