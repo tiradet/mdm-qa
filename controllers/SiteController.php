@@ -29,7 +29,7 @@ class SiteController extends Controller
                 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout','index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -67,14 +67,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if (Yii::$app->user->identity->role==99){
+        if (@Yii::$app->user->identity->role==99){
             return $this->redirect(['site/admin']);
         }
         return $this->render('index');
     }
     public function actionAdmin()
     {
-        if (Yii::$app->user->identity->role==10){
+        if (@Yii::$app->user->identity->role==10){
             return $this->redirect(['site/index']);
         }
         return $this->render('admin');
@@ -113,7 +113,8 @@ class SiteController extends Controller
 
       public function actionLogin()
     {
-        $this->layout='login';
+       // $this->layout='login';
+        $this->layout='loginimg';
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
             $url  = Config::findOne(['code' => 'A002'])->value;

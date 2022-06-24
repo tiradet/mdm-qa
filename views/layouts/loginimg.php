@@ -26,9 +26,7 @@ body{
 -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.24);
 box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.24);
 padding:0px;
-background:#1e2a75;
-    background-image: url('images/bg.jpg');
-    background-repeat: no-repeat;
+
     background-position: 50% 0;
     -ms-background-size: cover;
     -o-background-size: cover;

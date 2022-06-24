@@ -35,6 +35,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttonOptions'=>['class'=>'btn btn-default'],
                 'template'=>'<div class="btn-group btn-group-sm text-center" role="group">{view} {update}{delete}</div>',
+               'visibleButtons' => [
+                   'update' => Yii::$app->user->identity->role==99,
+                   'delete' => Yii::$app->user->identity->role==99,
+               ],
+                                        'buttons'=>[
+                            'view' => function($url,$model,$key){
+                                return Html::a('<i class="glyphicon glyphicon-folder-close"></i> อ่านเพิ่มเติม..',$url,['class'=>'btn btn-primary']);
+                            },
+                        ],
                 'options'=> ['style'=>'width:120px;'],
             ],
         ],

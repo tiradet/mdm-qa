@@ -17,8 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-md-10 col-md-offset-1 main" >
         <div class="col-md-6 left-side" >
-            <h3>Meetting Room </h3>
-            <p>--</p>
+            <h3>Live Service</h3>
+            <p>Computer Support Department Of Landtransport</p>
+            <br>
 
         </div><!--col-sm-6-->
 
@@ -26,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <h3></h3>
 
             <!--Form with header-->
-            <div class="form">
+            <div class="form box">
 
                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
                 <?= $form->field($model, 'username')->label('รหัสผู้ใช้งาน') ?>
