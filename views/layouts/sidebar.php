@@ -16,11 +16,11 @@
             $menu=[
                 ['label' => '<i class="fa fa-home" aria-hidden="true"></i> หน้าแรก', 'url' => ['/site/admin']],
                 ['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> รายการแจ้งปัญหา', 'url' => ['/job/index-admin']],
-                ['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> คู่มือการใช้งาน ต่างๆ', 'url' => ['/manual/index']],
+                //['label' => '<i class="fa fa-desktop" aria-hidden="true"></i> คู่มือการใช้งาน ต่างๆ', 'url' => ['/manual/index']],
 
                 ['label' => '<span class="fa fa-list" aria-hidden="true"></span> รายงาน',
                     'items' => [
-                        ['label' => 'การจองห้องประชุมตามช่วงวันที่', 'url' => ['/report/index']],
+                        //['label' => 'การจองห้องประชุมตามช่วงวันที่', 'url' => ['/report/index']],
                     ]
                 ], ['label' => '<span class="fa fa-cogs" aria-hidden="true"></span> ตั้งค่า',
                     'items' => [

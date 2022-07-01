@@ -18,15 +18,30 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'ref',
     ],
-
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'org_id',
+    ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'system_title',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'system_line',
+        'attribute'=>'system_detail',
     ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'system_img',
+    ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'system_option',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'system_line',
+    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

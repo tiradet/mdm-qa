@@ -5,7 +5,7 @@ $params = require(__DIR__ . '/params.php');
 $config = [
     'id' => 'MDM-QA_KM',
     'basePath' => dirname(__DIR__),
-    'name'=>'MDM-QA_KM',
+    'name'=>'MDM-QA',
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -23,6 +23,20 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'OdYTxYz-trhteerar4t54teretrtr',
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'kartik\form\ActiveFormAsset' => [
+                    'bsDependencyEnabled' => true // do not load bootstrap assets for a specific asset bundle
+                ],
+            ],
+        ],
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@app/views' => '@app/themes/adminlte/'
+                ],
+            ],
         ],
                 'errorHandler' => [
             'errorAction' => 'site/error',

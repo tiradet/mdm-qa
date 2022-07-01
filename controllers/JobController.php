@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Room;
+use app\models\SystemList;
+use app\models\User;
 use mdm\autonumber\AutoNumber;
 use Yii;
 use app\models\JobRequest;
@@ -47,6 +49,11 @@ class JobController extends Controller
      */
     public function actionIndex()
     {
+        if(Yii::$app->user->identity->role==99) {
+            return $this->redirect(['index-admin']);
+            exit();
+        }
+
         $searchModel = new JobRequestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere([ 'question_by' => Yii::$app->user->identity->username]);
@@ -58,6 +65,11 @@ class JobController extends Controller
     }
     public function actionIndexAdmin()
     {
+        if(Yii::$app->user->identity->role<>99) {
+            return $this->redirect(['index']);
+            exit();
+        }
+
         $searchModel = new JobRequestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         //$dataProvider->query->andFilterWhere([ 'iss_off_loc_code' => Yii::$app->user->identity->username]);
@@ -100,12 +112,28 @@ class JobController extends Controller
         ]);
     }
 */
+
+    public function actionEndBySelf($id) {
+        $model = $this->findModel($id);
+        $model->job_status = '4';
+        $model->save();
+
+        Yii::$app->session->setFlash(\dominus77\sweetalert2\Alert::TYPE_SUCCESS, [
+            [
+                'title' => 'การแจ้งเตือน',
+                'text' => 'ระบบได้ "ยุติปัญหาโดยตนเอง" เรื่อง "'.$model->title.'" เรียบร้อยแล้ว',
+                'confirmButtonText' => 'ตกลง',
+            ]
+
+        ]);
+        return $this->redirect(['view', 'id' => $model->id]);
+    }
     public function actionCreate()
     {
         $model = new JobRequest();
         $model->iss_off_loc_code = Yii::$app->user->identity->offLocCode;
         $model->question_by = Yii::$app->user->identity->username;
-        $model->job_ref = AutoNumber::generate('D{Ymd}.???');
+        //$model->job_ref = AutoNumber::generate('D{Ymd}.???');
         $model->job_status=1;
         $model->job_request_date = new Expression('NOW()');
         $model->content_question ='
@@ -113,7 +141,7 @@ class JobController extends Controller
             <li>เบอร์โทรติดต่อกลับ :</li>
             <li>(เบอร์ IP Phone/เบอร์สำนักงาน/เบอร์มือถือ) :</li>
             <li> เลขทะเบียนรถ/รย. :</li>
-            <li> &gt;รหัสโปรแกรม :</li>
+            <li> [รหัสโปรแกรม] :</li>
             <li> ข้อมูลอื่นๆ :</li>
             <li> ปัญหาที่พบ/ข้อซักถาม :</li>
         </ul>
@@ -122,11 +150,11 @@ class JobController extends Controller
         if ($model->load(Yii::$app->request->post()) ) {
 
             $this->Uploads(false);
-
+            $model->job_ref = AutoNumber::generate('D{Ymd}.???');
             if($model->save()){
                 $book = $this->findModel($model->id);
-                $message = "แจ้งปัญหา เรื่อง :: ".$book->title."\r\n จาก . :: ".$book->dltOffice->OFF_LOC_DESC."\r\n รหัส ".$book->job_ref."\r\n";
-                $res = $this->notify_messagex($message,$book->system->system_line);
+                $message = "บันทึกรายการแจ้งปัญหา  \"ระบบ ".$book->sys_ref." : ".SystemList::getFullSystemNameByRef($book->sys_ref) ."\"\r\n เรื่อง : ".$book->title."\r\n รายละเอียด : ".$book->getContentQuestion()."\r\n จาก : " . User::getFullNameByUsername($model->question_by) . " (".$book->dltOffice->OFF_LOC_DESC.")\r\n รหัสอ้างอิง : ".$book->job_ref."\r\n";
+                $res = $this->notify_messageToGroup($message,$book->system->system_line);
 
                 Yii::$app->session->setFlash(\dominus77\sweetalert2\Alert::TYPE_SUCCESS, [
                     [
@@ -174,13 +202,13 @@ class JobController extends Controller
     public function actionAnswer($id)
     {
         $model = $this->findModel($id);
-        $model->job_close_date =date("Y-m-d");
+
         $model->answer_by = Yii::$app->user->identity->username;
         list($initialPreview,$initialPreviewConfig) = $this->getInitialPreview($model->ref);
 
         if ($model->load(Yii::$app->request->post())) {
             $this->Uploads(false);
-
+            $model->job_close_date =date("Y-m-d h:i:s");
             if($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -341,7 +369,7 @@ class JobController extends Controller
             $file = Html::img($filePath,['class'=>'file-preview-image', 'alt'=>$model->file_name, 'title'=>$model->file_name]);
         }else{
             $file =  "<div class='file-preview-other'> " .
-                "<h2><i class='glyphicon glyphicon-file'></i></h2>" .
+                "<h2><i class='fa fa-eye'></i></h2>" .
                 "</div>";
         }
         return $file;
@@ -374,10 +402,10 @@ class JobController extends Controller
         }
     }
 
-    public function notify_messagex($message,$lineToken) {
+
+    public function notify_messageToGroup($message,$lineToken) {
         $line_api = 'https://notify-api.line.me/api/notify';
-        //$line_token = '2gFeII7MljzFBWy8hRqSmiywvZBIYHEa4oLGAN7Ei2q'; //DLT: ระบบรถทดสอบ
-        $line_token = 'LI6MVtnlbQoEXgobvGqGmKiKJ7oqGaxZWNUC24oZGGz'; //IMplement Line Token
+        $line_token = $lineToken;
         $queryData = array('message' => $message);
         $queryData = http_build_query($queryData, '', '&');
         $headerOptions = array('http' => array('method' => 'POST', 'header' => "Content-Type: application/x-www-form-urlencoded\r\n" . "Authorization: Bearer " . $line_token . "\r\n" . "Content-Length: " . strlen($queryData) . "\r\n", 'content' => $queryData));

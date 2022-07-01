@@ -2,11 +2,11 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use kartik\form\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\widgets\FileInput;
 use bookin\aws\checkbox\AwesomeCheckbox;
-use yii\widgets\DetailView;
+use kartik\detail\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Room */
@@ -65,7 +65,7 @@ use yii\widgets\DetailView;
                             'lang' => 'th',
                             'plugins' => ['clips', 'fontcolor','imagemanager']
                         ]
-                    ])->label('รายละเอียด วิธีแก้ไข')?>
+                    ])->label('รายละเอียด / วิธีแก้ไข')?>
                 </div>
             </div>
             <div class="row">
@@ -80,7 +80,7 @@ use yii\widgets\DetailView;
                         'list'=>[ // array data
                             '1'=>'รอตรวจสอบ',
                             '2'=>'กำลังตรวจสอบ',
-                            '3'=>'แก้ไขเรียบร้อย'
+                            '3'=>'ยุติปัญหาโดยแอดมิน'
                         ]
                     ]);
                     ?>
@@ -90,7 +90,7 @@ use yii\widgets\DetailView;
                     <?= $form->field($model, 'answer_by')->hiddenInput(['maxlength' => true])->label(false) ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'job_close_date')->textInput() ?>
+                    <?= $form->field($model, 'job_close_date')->textInput(['disabled' => true]) ?>
                 </div>
             </div>
             <div class="row block ">

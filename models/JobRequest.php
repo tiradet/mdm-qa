@@ -63,7 +63,7 @@ class JobRequest extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sys_ref','job_ref','ref','title', 'content_question',  'iss_off_loc_code', 'question_by'], 'required'],
+            [['sys_ref','ref','title', 'content_question',  'iss_off_loc_code', 'question_by'], 'required'],
             [['content_question', 'content_answer'], 'string'],
             [['iss_off_loc_code', 'job_request_date', 'job_close_date', 'create_at', 'update_at'], 'safe'],
             [['create_by', 'update_by','job_status'], 'integer'],
@@ -91,7 +91,7 @@ class JobRequest extends \yii\db\ActiveRecord
             'answer_by' => 'ผู้ตอบ',
             'job_status' => 'สถานะ',
             'job_request_date' => 'วันที่สอบถาม',
-            'job_close_date' => 'วันที่แก้ไข',
+            'job_close_date' => 'วันที่แอดมินดำเนินการล่าสุด',
             'create_at' => 'Create At',
             'update_at' => 'Update At',
             'create_by' => 'Create By',
@@ -116,16 +116,30 @@ class JobRequest extends \yii\db\ActiveRecord
     public function getStatus() {
         switch ($this->job_status) {
             case '1':
-                return '<span class="label label-warning">รอตรวจสอบ</span> ';
+                return '<span class="label label-danger">รอตรวจสอบ</span> ';
             case '2':
-                return '<span class="label label-info">กำลังตรวจสอบ</span> ';
+                return '<span class="label label-warning">กำลังตรวจสอบ</span> ';
             case '3':
-                return '<span class="label label-success">ดำเนินการเรียบร้อย</span> ';
+                return '<span class="label label-primary">ยุติปัญหาโดยแอดมิน</span> ';
+            case '4':
+                return '<span class="label label-primary">ยุติปัญหาโดยตนเอง</span> ';
 
         }
 
         return NULL;
     }
+
+    public function getContentQuestion() {
+        $returnVal = '';
+
+        $returnVal = str_replace("<ul>","",$this->content_question);
+        $returnVal = str_replace("</ul>","",$returnVal);
+        $returnVal = str_replace("            <li>","- ",$returnVal);
+        $returnVal = str_replace("</li>","",$returnVal);
+
+        return $returnVal;
+    }
+
     public function getThumbnails($ref,$event_name){
         $uploadFiles   = Uploads::find()->where(['ref'=>$ref])->all();
         $preview = [];

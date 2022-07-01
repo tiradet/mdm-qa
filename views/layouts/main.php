@@ -4,11 +4,12 @@
 
 use jcabanillas\inspinia\AppAsset;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\NavBar;
 use yii\widgets\Breadcrumbs;
-use yii\bootstrap\Alert;
+use yii\bootstrap4\Alert;
 use aryelds\sweetalert\SweetAlert;
+
 AppAsset::register($this);
 rmrevin\yii\fontawesome\AssetBundle::register($this);
 
@@ -32,6 +33,8 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/jcabanillas/
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
+
+
     </head>
     <?php
     $this->registerCss("

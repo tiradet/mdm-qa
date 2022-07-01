@@ -26,7 +26,7 @@ class SystemListController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-                    'bulk-delete' => ['post'],
+                    'bulkdelete' => ['post'],
                 ],
             ],
         ];
@@ -54,15 +54,14 @@ class SystemListController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {
-        $model = $this->findModel($id);
+    {   
         $request = Yii::$app->request;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> $model->system_title,
+                    'title'=> "SystemList #".$id,
                     'content'=>$this->renderAjax('view', [
-                        'model' => $model,
+                        'model' => $this->findModel($id),
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
@@ -154,7 +153,7 @@ class SystemListController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> $model->system_title,
+                    'title'=> "Update SystemList #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -173,7 +172,7 @@ class SystemListController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> $model->system_title,
+                    'title'=> "Update SystemList #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -230,7 +229,7 @@ class SystemListController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionBulkDelete()
+    public function actionBulkdelete()
     {        
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys

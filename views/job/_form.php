@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use kartik\form\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\widgets\FileInput;
 use kartik\select2\Select2;
@@ -16,14 +16,19 @@ use kartik\color\ColorInput;
     <div class="panel panel-success">
         <div class="panel-heading"><h4><?= $this->title ?></h4></div>
         <div class="panel-body">
-            <?php $form = ActiveForm::begin(); ?>
+            <?php //$form = ActiveForm::begin();
+            //
+            $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]);
+            ?>
             <?=$form->errorSummary($model) ?>
             <?= $form->field($model, 'ref')->hiddenInput(['maxlength' => 50])->label(false); ?>
             <div class="row">
-                <div class="col-md-5" >
+                <div class="col-md-12" >
                     <?=
                     $form->field($model, 'sys_ref')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(\app\models\SystemList::find()->all(), 'ref','system_title'),
+                        'data' => ArrayHelper::map(\app\models\SystemList::find()->orderBy([
+                            'ref' => SORT_ASC
+                        ])->all(), 'ref','fullSystemName'),
                         'disabled' => false,
                         'options' => ['placeholder' => 'เลือก  ระบบงาน',
                             'id' => 'ddl-builder',
@@ -34,11 +39,10 @@ use kartik\color\ColorInput;
                     ])->label('ระบบงาน');
                     ?>
                 </div>
-                <div class="col-md-5">
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <?= $form->field($model, 'title')->textInput(['maxlength' => true])->label('เรื่อง') ?>
-                </div>
-                <div class="col-md-2">
-                    <?= $form->field($model, 'job_ref')->textInput(['maxlength' => true,'disabled' => true])->label('รหัส') ?>
                 </div>
             </div>
             <div class="row">
@@ -61,12 +65,19 @@ use kartik\color\ColorInput;
                         'name' => 'upload_ajax[]',
                         'options' => ['multiple' => true,'accept' => 'image/*'], //'accept' => 'image/*' หากต้องเฉพาะ image
                         'pluginOptions' => [
-                            'overwriteInitial'=>false,
-                            'encodeUrl'=>false,
-                            'initialPreviewShowDelete'=>true,
                             'initialPreview'=> $initialPreview,
                             'initialPreviewConfig'=> $initialPreviewConfig,
+                            'encodeUrl'=>false,
+                            'showPreview' => true,
+                            'showCaption' => true,
+                            'showRemove' => false,
+                            'showUpload' => false,
+                            'overwriteInitial'=>false,
+
+                            //'initialPreviewShowDelete'=>true,
+                            //
                             'uploadUrl' => Url::to(['/job/upload-ajax']),
+
                             'uploadExtraData' => [
                                 'ref' => $model->ref,
                             ],

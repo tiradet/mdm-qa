@@ -17,9 +17,10 @@ use yii\web\IdentityInterface;
  * @property string $password_reset_token
  * @property string $email
  * @property string $auth_key
- *  * @property string $province_id
+ * @property string $province_id
  * @property integer $role
  * @property integer $status
+ * @property string $root
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
@@ -97,6 +98,16 @@ public function attributeLabels()
      */
     public static function findIdentityByAccessToken($token, $type = null) {
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+
+    public static function getFullNameByUsername($username)
+    {
+        $returnVal = 0;
+
+        $data = self::find()->select(['title','name','surname'])->where(['username' => $username])->one();
+        $returnVal = @$data->title . @$data->name . ' '.@$data->surname;
+
+        return $returnVal;
     }
 
     /**

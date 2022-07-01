@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-md-10 col-md-offset-1 main" >
         <div class="col-md-6 left-side" >
-            <h3>Live Service</h3>
-            <p>Computer Support Department Of Landtransport</p>
+            <h3>MDM QA - ถามและตอบปัญหา</h3>
+            <p>ศูนย์เทคโนโลยีสารสนเทศ กรมการขนส่งทางบก</p>
             <br>
 
         </div><!--col-sm-6-->
@@ -32,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
                 <?= $form->field($model, 'username')->label('รหัสผู้ใช้งาน') ?>
                 <?= $form->field($model, 'password')->passwordInput()->label('รหัสผ่าน') ?>
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('<i class="fa fa-sign-in" aria-hidden="true"></i> เข้าสู่ระบบ', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>

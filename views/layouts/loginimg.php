@@ -51,9 +51,7 @@ background:#07080c;
     background-size: cover;
 }
 .fb:focus, .fb:hover{color:FFF !important;}
-body{
-font-family: 'Raleway', sans-serif;
-}
+
 
 .left-side{
 	padding:0px 0px 0px;

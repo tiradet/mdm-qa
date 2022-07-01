@@ -21,10 +21,10 @@ use yii\helpers\Url;
             ]); ?>
 
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <?=
                     $form->field($model, 'sys_ref')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(\app\models\SystemList::find()->all(), 'ref','system_title'),
+                        'data' => ArrayHelper::map(\app\models\SystemList::find()->all(), 'ref','fullSystemName'),
                         'disabled' => false,
                         'options' => ['placeholder' => 'เลือก  ระบบงาน',
                             'id' => 'ddl-builder',
@@ -39,7 +39,7 @@ use yii\helpers\Url;
                 <div class="col-md-3">
                     <?= $form->field($model, 'title')->textInput(['maxlength' => true])->label('เรื่อง') ?>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <?php
                     echo $form->field($model, 'job_status')->widget(AwesomeCheckbox::classname(),[
                         'type'=>AwesomeCheckbox::TYPE_RADIO,
@@ -50,16 +50,18 @@ use yii\helpers\Url;
                         'list'=>[ // array data
                             '1'=>'รอตรวจสอบ',
                             '2'=>'กำลังตรวจสอบ',
-                            '3'=>'แก้ไขเรียบร้อย'
+                            '3'=>'ยุติปัญหาโดยแอดมิน',
+                            '4'=>'ยุติปัญหาโดยตนเอง'
                         ]
                     ]);
+
                     ?>
                 </div>
-                <div class="col-md3">
+                <div class="col-md-3">
                     <div class="form-group">
                         <br/>
-                        <?= Html::submitButton('<i class="fa fa-search" aria-hidden="true"></i> Search', ['class' => 'btn btn-primary']) ?>
-                        <?= Html::a('<i class="fa fa-undo" aria-hidden="true"></i> ยกเลิก', ['index-admin'], ['class' => 'btn btn-warning']) ?>
+                        <?= Html::submitButton('<i class="fa fa-search" aria-hidden="true"></i> ค้นหา', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::a('<i class="fa fa-undo" aria-hidden="true"></i> ยกเลิก', ['index'], ['class' => 'btn btn-warning']) ?>
                     </div>
                 </div>
             </div>

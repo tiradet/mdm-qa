@@ -13,9 +13,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'ref')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'org_id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'system_title')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'system_detail')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'system_img')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'system_option')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'system_line')->textInput(['maxlength' => true]) ?>
 

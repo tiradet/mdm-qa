@@ -55,4 +55,29 @@ class SystemList extends \yii\db\ActiveRecord
             'system_line' => 'Line Token',
         ];
     }
+
+    public function getFullSystemName() {
+        return @$this->ref . ' : ' . @$this->system_title;
+    }
+
+    public static function getFullSystemNameByRef($systemRef)
+    {
+        $returnVal = '';
+
+        $data = self::find()->select(['system_title'])->where(['ref' => $systemRef])->one();
+        $returnVal = @$data->system_title;
+
+        return $returnVal;
+    }
+
+    public static function getFullSystemNameAndAbrevByRef($systemRef)
+    {
+        $returnVal = '';
+
+        $data = self::find()->select(['system_title'])->where(['ref' => $systemRef])->one();
+        $returnVal = $systemRef . ' : ' . @$data->system_title;
+
+        return $returnVal;
+    }
+
 }

@@ -14,7 +14,13 @@ $this->title = 'รายการแจ้งปัญหา';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="booking-index">
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php
+    if (Yii::$app->user->identity->role == 99) {
+        echo $this->render('_search-admin', ['model' => $searchModel]);
+    } else {
+        echo $this->render('_search', ['model' => $searchModel]);
+    }
+    ?>
     <p>
         <?= Html::a('<i class="fa fa-plus-circle" aria-hidden="true"></i> บันทึกรายการแจ้งปัญหา', ['create'], ['class' => 'btn btn-danger']) ?>
     </p>
@@ -29,32 +35,69 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<i class="fa fa-th-list" aria-hidden="true"></i> '.$this->title,
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'job_ref',
-            'sys_ref',
-            'title',
-          //  'content_answer',
+            [   'class' => 'yii\grid\SerialColumn',
+                'options'=> ['style'=>'width:4%;'],
+            ],
             [
-                    'format'=>'raw',
-                'attribute' => 'job_status',
-                'headerOptions' => ['width' => 'auto'],
+                'format'=>'raw',
+                'attribute' => 'job_ref',
+                'options'=> ['style'=>'width:4%;'],
+            ],
+            [
+                'format'=>'raw',
+                'attribute' => 'job_request_date',
+                'options'=> ['style'=>'width:12%;'],
                 'value' => function ($model, $key, $index, $widget) {
-                    return $model->status;
+                    return \app\models\MyDate::getDateThaifull($model->job_request_date);
                 },
             ],
+            [
+                'label'=>'หน่วยงาน',
+                'format'=>'raw',
+                //'attribute' => 'question_by',
+                'options'=> ['style'=>'width:7%;'],
+                'value' => function ($model, $key, $index, $widget) {
+                    return $model->dltOffice->OFF_LOC_ABREV;
+                },
+            ],
+            [
+                'label'=>'ระบบ',
+                'format'=>'raw',
+                'attribute' => 'sys_ref',
+                'options'=> ['style'=>'width:5%;'],
+                'value' => function ($model, $key, $index, $widget) {
+                    return $model->sys_ref;
+                },
+            ],
+            'title',
+
+
+
+          //  'content_answer',
+//            [
+//                    'format'=>'raw',
+//                'attribute' => 'job_status',
+//                'headerOptions' => ['width' => 'auto'],
+//                'options'=> ['style'=>'width:10%;'],
+//                'value' => function ($model, $key, $index, $widget) {
+//                    return $model->status;
+//                },
+//            ],
 
             [
-                'class' => 'kartik\grid\EditableColumn',
+               // 'class' => 'kartik\grid\EditableColumn',
                 'attribute' => 'job_status',
-                'width' => '100px',
+                'format'=>'raw',
+                'options'=> ['style'=>'width:13%;'],
                 'value' => function ($model, $key, $index, $widget) {
                     return $model->status;
-                },
+                },/*
                 'editableOptions'=> function ($model, $key, $index, $widget) {
                     $appttypes = [
                         '1'=>'รอตรวจสอบ',
                         '2'=>'กำลังตรวจสอบ',
-                        '3'=>'แก้ไขเรียบร้อย'
+                        '3'=>'ยุติปัญหาโดยแอดมิน',
+
                     ];
                     return [
                         'header' => 'สถานะ',
@@ -63,9 +106,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'inputType' => Editable::INPUT_DROPDOWN_LIST,
                         'displayValueConfig' => $appttypes,
                         'data' => $appttypes,
-                        'formOptions'=> ['action' => ['/booking/update-editable']] // point to new action
+                        'formOptions'=> ['action' => ['/job/update-editable']] // point to new action
                     ];
                     }
+*/
             ],
 
             // 'create_at',
@@ -76,8 +120,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttonOptions'=>['class'=>'btn btn-default'],
-                'template'=>'<div class="btn-group btn-group-sm text-center" role="group">{view} {update}{delete}</div>',
-                'options'=> ['style'=>'width:120px;'],
+                'template'=>'<div class="btn-group btn-group-sm text-center" role="group">{view} {update}</div>',
+                'options'=> ['style'=>'width:10%;'],
             ],
         ],
     ]); ?>

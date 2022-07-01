@@ -12,7 +12,7 @@ class PhpAuthDigestTest extends AbstractTokenTestCase
     public function testParseFail()
     {
         $this->expectException(AuthentificationException::class);
-        $auth = new PhpAuthDigest();
+        $auth = new PhpAuthDigest;
     }
 
     public function testParse()
@@ -33,12 +33,10 @@ class PhpAuthDigestTest extends AbstractTokenTestCase
 
     private function getTestToken()
     {
-        $auth_digest = 'realm="test",qop="auth",nonce="xxxxxxxxxxxxx",opaque="yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"';
-        
         $this->setServerVars([
-            'PHP_AUTH_DIGEST' => $auth_digest
+            'PHP_AUTH_DIGEST' => 'realm="test",qop="auth",nonce="xxxxxxxxxxxxx",opaque="yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"'
         ]);
 
-        return new PhpAuthDigest();
+        return new PhpAuthDigest;
     }
 }
